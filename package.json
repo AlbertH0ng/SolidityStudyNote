@@ -1,0 +1,31 @@
+{
+  "name": "soliditystudynote",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:localhost": "hardhat run scripts/deploy.js --network localhost",
+    "node": "hardhat node",
+    "clean": "hardhat clean",
+    "console": "hardhat console"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlbertH0ng/SolidityStudyNote.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AlbertH0ng/SolidityStudyNote/issues"
+  },
+  "homepage": "https://github.com/AlbertH0ng/SolidityStudyNote#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.26.3"
+  }
+}
