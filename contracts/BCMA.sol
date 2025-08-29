@@ -2,13 +2,13 @@
 pragma solidity ^0.8.24;
 
 /**
- * @title SimpleToken
- * @dev 实现 ERC20 代币标准的简单代币合约
+ * @title BCMA Token
+ * @dev 实现 ERC20 代币标准的 BCMA (Blockchain My Ass) 代币
  */
-contract SimpleToken {
+contract BCMA {
     // 代币基本信息
-    string public name = "SimpleToken";
-    string public symbol = "SIM";
+    string public name = "Blockchain My Ass";
+    string public symbol = "BCMA";
     uint8 public decimals = 18;
     uint256 public totalSupply;
     
@@ -69,7 +69,7 @@ contract SimpleToken {
      * @param _to 接收者地址
      * @param _value 转账金额
      * @return success 是否成功
-     */ 
+     */
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         require(_from != address(0), "ERC20: transfer from the zero address");
         require(_to != address(0), "ERC20: transfer to the zero address");
