@@ -395,6 +395,119 @@ contract MyToken is Ownable, Pausable {
 }
 ```
 
+## 接口（Interface）
+
+接口是 Solidity 中定义合约标准的重要工具，它只声明函数而不实现它们，类似于其他编程语言中的抽象类或接口。
+
+### 接口特点
+- 不能包含状态变量
+- 不能包含构造函数
+- 不能继承除接口外的其他合约
+- 所有函数必须是 external 且不能有函数体
+- 可以继承其他接口
+
+### 接口定义和实现
+```solidity
+// 定义接口
+interface IERC20 {
+    // 事件定义
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
+    
+    // 函数声明
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address account) external view returns (uint256);
+    function transfer(address to, uint256 amount) external returns (bool);
+    function allowance(address owner, address spender) external view returns (uint256);
+    function approve(address spender, uint256 amount) external returns (bool);
+    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+}
+
+// 实现接口
+contract MyERC20 is IERC20 {
+    string public name;
+    string public symbol;
+    uint8 public decimals;
+    uint256 private _totalSupply;
+    
+    mapping(address => uint256) private _balances;
+    mapping(address => mapping(address => uint256)) private _allowances;
+    
+    constructor(string memory _name, string memory _symbol) {
+        name = _name;
+        symbol = _symbol;
+        decimals = 18;
+    }
+    
+    function totalSupply() external view override returns (uint256) {
+        return _totalSupply;
+    }
+    
+    function balanceOf(address account) external view override returns (uint256) {
+        return _balances[account];
+    }
+    
+    function transfer(address to, uint256 amount) external override returns (bool) {
+        require(to != address(0), "Transfer to zero address");
+        require(_balances[msg.sender] >= amount, "Insufficient balance");
+        
+        _balances[msg.sender] -= amount;
+        _balances[to] += amount;
+        
+        emit Transfer(msg.sender, to, amount);
+        return true;
+    }
+    
+    function allowance(address owner, address spender) external view override returns (uint256) {
+        return _allowances[owner][spender];
+    }
+    
+    function approve(address spender, uint256 amount) external override returns (bool) {
+        _allowances[msg.sender][spender] = amount;
+        emit Approval(msg.sender, spender, amount);
+        return true;
+    }
+    
+    function transferFrom(address from, address to, uint256 amount) external override returns (bool) {
+        require(from != address(0), "Transfer from zero address");
+        require(to != address(0), "Transfer to zero address");
+        require(_balances[from] >= amount, "Insufficient balance");
+        require(_allowances[from][msg.sender] >= amount, "Insufficient allowance");
+        
+        _balances[from] -= amount;
+        _balances[to] += amount;
+        _allowances[from][msg.sender] -= amount;
+        
+        emit Transfer(from, to, amount);
+        return true;
+    }
+}
+```
+
+### 接口的使用场景
+1. **标准化合约接口**：如 ERC20、ERC721 等标准
+2. **合约间交互**：通过接口调用其他合约的函数
+3. **代码解耦**：将合约功能分离，提高代码可维护性
+
+### 通过接口调用其他合约
+```solidity
+contract TokenInteraction {
+    IERC20 public token;
+    
+    constructor(address tokenAddress) {
+        token = IERC20(tokenAddress);
+    }
+    
+    function getBalance(address account) public view returns (uint256) {
+        return token.balanceOf(account);
+    }
+    
+    function transferTokens(address to, uint256 amount) public returns (bool) {
+        return token.transferFrom(msg.sender, to, amount);
+    }
+}
+```
+
 ## 错误处理
 
 ### require 语句
